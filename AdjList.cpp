@@ -15,16 +15,6 @@ vector<uint>   AdjList::reflectDegrees;
 vector<string> AdjList::names;
 AList          AdjList::adjList;
 
-AdjList::~AdjList ()
-{
-    for (AList::iterator it = adjList.begin(); it != adjList.end(); it++)
-    {
-        if (*it)
-        {
-            delete *it;
-        }
-    }
-}
 /**
 * input data from files to structures
 */
@@ -63,6 +53,11 @@ bool AdjList::FillLists (const string& fileNames, const string& fileAdj)
 
     return true;
 }
+
+void AdjList::ClearLists ( )
+{
+    ResizeAdjList (0);
+}
 /**
 * fill names list from file
 */
@@ -78,6 +73,19 @@ void AdjList::FillNamesList (ifstream& myfile)
         }
     }
 }
+
+void AdjList::ResizeAdjList (uint size)
+{
+    for (AList::iterator it = adjList.begin(); it != adjList.end(); it++)
+    {
+        if (*it)
+        {
+            delete (*it);
+        }
+    }
+
+    adjList.resize (size, NULL);
+}
 /**
 * prepare and fill adjacency list from file
 */
@@ -85,7 +93,7 @@ bool AdjList::FillAdjList (ifstream& myfile)
 {
     uint   idx = 0;
     string line;
-    adjList.resize (names.size (), NULL);
+    ResizeAdjList (names.size ());
 
     while (getline (myfile, line) && idx < names.size ())
     {

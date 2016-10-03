@@ -31,6 +31,8 @@ int main()
     }
     while (request != Finish);
 
+    AdjList::ClearLists ();
+
     return 0;
 }
 

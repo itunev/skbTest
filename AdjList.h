@@ -34,11 +34,13 @@ class AdjList
 public:
     AdjList            ( )           { };
     AdjList            (AdjList& al) { };
-    virtual ~AdjList   ( );
+    virtual ~AdjList   ( )           { };
 
     static bool FillLists      (const string& fileNames,
                                 const string& fileAdj); // for initialisation of lists
+    static void ClearLists     ( );  // for correct finish without memory leaks
 private:
+    static void ResizeAdjList  (uint          size   );
     static void FillNamesList  (ifstream&     myfile );
     static bool FillAdjList    (ifstream&     myfile );
     static bool SetAdjListLine (const string& line,
