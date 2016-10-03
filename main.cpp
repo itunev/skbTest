@@ -9,7 +9,7 @@ int main()
 // initialize structures for tasks solving
     if (!al.FillLists ("names.txt", "AdjList.txt"))
     {
-        cout << "incorrect input data";
+        cout << "incorrect input data\n";
         return 1;
     }
 
