@@ -146,7 +146,7 @@ void AdjList::CalcDegrees ()
                 {
                     maxInnerDegree++;
                 }
-// this place can be optimized by ignore of checking hash if reflectDegrees [idx] > 0
+
                 if (adjList [*hit] &&
                     adjList [*hit] -> find (idx) !=
                     adjList [*hit] -> end ()) // is *hit likes idx too
@@ -197,28 +197,29 @@ void AdjList::NamesWithMaxDegreeCount ()
     }
 }
 // show requested list
-void AdjList::ShowList (uint command)
+void AdjList::ShowList (uint request)
 {
-    if (command == 1)
+    switch (request)
     {
-        for (uint i = 0; i < emptyInnerDegrees.size(); i++)
-        {
-            cout << names[emptyInnerDegrees[i]] << "\n";
-        }
+        case EmptyInnerDegreesCount:
+            ShowList (emptyInnerDegrees);
+            break;
+        case EmptyMutualDegreesCount:
+            ShowList (emptyMutual);
+            break;
+        case MaxInnerDegreesCount:
+            ShowList (maxInnerDegrees);
+            break;
+        default:
+            cout << "unknown request " << request << endl;
     }
-    else if (command == 2)
+}
+// show list
+void AdjList::ShowList (vector<uint>& idsList)
+{
+    for (uint i = 0; i < idsList.size (); i++)
     {
-        for (uint i = 0; i < emptyMutual.size(); i++)
-        {
-            cout << names[emptyMutual[i]] << "\n";
-        }
-    }
-    else if (command == 3)
-    {
-        for (uint i = 0; i < maxInnerDegrees.size(); i++)
-        {
-            cout << names[maxInnerDegrees[i]] << "\n";
-        }
+        cout << names [idsList [i]] << "\n";
     }
 }
 

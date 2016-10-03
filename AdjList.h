@@ -11,6 +11,14 @@ typedef unsigned int              uint;   // id of vertice
 typedef unordered_set<uint>       hashid; // hash of destination vertex
 typedef vector<hashid*>           AList;  // list of hashs
 
+enum Request
+{
+    EmptyInnerDegreesCount  = 1,
+    EmptyMutualDegreesCount = 2,
+    MaxInnerDegreesCount    = 3,
+    Finish                  = 4
+};
+
 class AdjList
 {
     static uint           maxInnerDegree; // maximum count of inner directed edges
@@ -41,7 +49,8 @@ public:
     static void NamesWithEmptyReflectDegreeCount ( ); // call after CalcDegrees for 2 task
     static void NamesWithMaxDegreeCount          ( ); // call after CalcDegrees for 3 task
 
-    static void ShowList                         (uint command);
+    static void ShowList                         (uint          request);
+    static void ShowList                         (vector<uint>& idsList);
 };
 
 #endif // #ifndef __AdjList_H
