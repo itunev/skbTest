@@ -150,10 +150,7 @@ void AdjList::CalcDegrees ()
             {
                 innerDegrees [*hit]++; // idx likes *hit
 
-                if (maxInnerDegree < innerDegrees [*hit])
-                {
-                    maxInnerDegree++;
-                }
+                maxInnerDegree = max (maxInnerDegree, innerDegrees [*hit]);
 
                 if (adjList [*hit] &&
                     adjList [*hit] -> find (idx) !=
