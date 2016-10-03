@@ -110,7 +110,7 @@ bool AdjList::FillAdjList (ifstream& myfile)
 /**
 * parse line with numbers and fill one line (with index idx) of adjacency list
 */
-bool AdjList::SetAdjListLine (const string& line, uint& idx)
+bool AdjList::SetAdjListLine (const string& line, uint idx)
 {
     if (line.size ())
     {
@@ -146,19 +146,26 @@ void AdjList::CalcDegrees ()
     {
         if (*it) // it also warranty of ignoring of vertexes with empty outer degrees
         {
-            for (hashid::iterator hit = (*it) -> begin (); hit != (*it) -> end (); hit++)
-            {
-                innerDegrees [*hit]++; // idx likes *hit
+            UpdateDegreesInfoByNextNode (idx);
+        }
+    }
+}
 
-                maxInnerDegree = max (maxInnerDegree, innerDegrees [*hit]);
+void AdjList::UpdateDegreesInfoByNextNode (uint idx)
+{
+    hashid * node = adjList [idx];
 
-                if (adjList [*hit] &&
-                    adjList [*hit] -> find (idx) !=
-                    adjList [*hit] -> end ()) // is *hit likes idx too
-                {
-                    reflectDegrees [idx]++;
-                }
-            }
+    for (hashid::iterator hit = node -> begin (); hit != node -> end (); hit++)
+    {
+        innerDegrees [*hit]++; // idx likes *hit
+
+        maxInnerDegree = max (maxInnerDegree, innerDegrees [*hit]);
+
+        if (adjList [*hit] &&
+            adjList [*hit] -> find (idx) !=
+            adjList [*hit] -> end ()) // is *hit likes idx too
+        {
+            reflectDegrees [idx]++;
         }
     }
 }

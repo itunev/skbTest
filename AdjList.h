@@ -36,15 +36,16 @@ public:
     AdjList            (AdjList& al) { };
     virtual ~AdjList   ( )           { };
 
-    static bool FillLists      (const string& fileNames,
+    static bool FillLists  (const string& fileNames,
                                 const string& fileAdj); // for initialisation of lists
-    static void ClearLists     ( );  // for correct finish without memory leaks
+    static void ClearLists ( );            // for correct finish without memory leaks
 private:
-    static void ResizeAdjList  (uint          size   );
-    static void FillNamesList  (ifstream&     myfile );
-    static bool FillAdjList    (ifstream&     myfile );
-    static bool SetAdjListLine (const string& line,
-                                uint&         idx    );
+    static void ResizeAdjList               (uint          size   );
+    static void FillNamesList               (ifstream&     myfile );
+    static bool FillAdjList                 (ifstream&     myfile );
+    static bool SetAdjListLine              (const string& line,
+                                             uint          idx    );
+    static void UpdateDegreesInfoByNextNode (uint          idx    );
 public:
     static void CalcDegrees                      ( ); // call after FillLists
     static void NamesWithEmptyDegreeCount        ( ); // call after CalcDegrees for 1 task

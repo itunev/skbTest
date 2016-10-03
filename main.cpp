@@ -24,6 +24,7 @@ int main()
     do
     {
         cin >> request;
+
         if (request != Finish)
         {
             AdjList::ShowList (request);
