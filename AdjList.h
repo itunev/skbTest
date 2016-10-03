@@ -40,7 +40,6 @@ public:
     static void NamesWithEmptyDegreeCount        ( ); // call after CalcDegrees for 1 task
     static void NamesWithEmptyReflectDegreeCount ( ); // call after CalcDegrees for 2 task
     static void NamesWithMaxDegreeCount          ( ); // call after CalcDegrees for 3 task
-    static void ShowDegrees                      ( ); // for test
 
     static void ShowList                         (uint command);
 };
