@@ -31,13 +31,13 @@ class AdjList
     static vector<uint>   emptyMutual;
     static vector<uint>   emptyInnerDegrees;
     static vector<uint>   maxInnerDegrees;
-public:
+
     AdjList            ( )           { };
     AdjList            (AdjList& al) { };
     virtual ~AdjList   ( )           { };
-
+public:
     static bool GetEdge    (uint          from,
-                            uint          to     );
+                            uint          to     );   // check for directed edge existing
     static bool FillLists  (const string& fileNames,
                             const string& fileAdj);   // for initialisation of lists
     static void ClearLists ( );            // for correct finish without memory leaks
