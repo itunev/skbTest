@@ -47,7 +47,9 @@ bool AdjList::FillNamesList (const string& fileNames)
     namesFile.open (fileNames);
 
     if (!namesFile.is_open ())
+    {
         return false;
+    }
 
     while (getline (namesFile, line))
     {
@@ -80,23 +82,22 @@ void AdjList::ResizeAdjList (uint size)
 bool AdjList::FillAdjList (const string& fileAdj)
 {
     ifstream adjFile;
-    uint     idx = 0;
     string   line;
     ResizeAdjList (names.size ());
     adjFile.open (fileAdj);
 
     if (!adjFile.is_open ())
-        return false;
-
-    while (getline (adjFile, line) && idx < names.size ())
     {
-        if (!SetAdjListLine (line, idx))
-         {
+        return false;
+    }
+
+    for (uint idx = 0; getline (adjFile, line) && idx < names.size (); idx++)
+    {
+        if (line.size () && !SetAdjListLine (line, idx))
+        {
             adjFile.close();
             return false;
-         }
-
-        idx++;
+        }
     }
 
     adjFile.close();
@@ -108,23 +109,25 @@ bool AdjList::FillAdjList (const string& fileAdj)
 */
 bool AdjList::SetAdjListLine (const string& line, uint idx)
 {
-    if (line.size ())
+    hashid *      elist  = new hashid;
+    istringstream ss (line);
+    uint          dest;
+
+    while (!ss.eof())
     {
-        hashid *      elist  = new hashid;
-        istringstream ss (line);
-        uint          dest;
+        ss >> dest;
 
-        while (!ss.eof())
+        if (dest < names.size () && dest != idx)
         {
-            ss >> dest;
-            if (dest < names.size () && dest != idx)
-                elist->insert (dest);
-            else
-                return false;
+            elist->insert (dest);
         }
-
-        adjList [idx] = elist;
+        else
+        {
+            return false;
+        }
     }
+
+    adjList [idx] = elist;
 
     return true;
 }
@@ -153,7 +156,7 @@ void AdjList::UpdateDegreesInfoByNextNode (uint idx)
 
     for (hashid::iterator hit = node -> begin (); hit != node -> end (); hit++)
     {
-        innerDegrees [*hit]++; // idx likes *hit
+        innerDegrees [*hit]++;        // idx likes *hit
 
         maxInnerDegree = max (maxInnerDegree, innerDegrees [*hit]);
 
