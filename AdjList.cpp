@@ -54,10 +54,8 @@ void AdjList::ClearLists ( )
 */
 bool AdjList::FillNamesList (const string& fileNames)
 {
-    ifstream namesFile;
+    ifstream namesFile (fileNames);
     string   line;
-
-    namesFile.open (fileNames);
 
     if (!namesFile.is_open ())
     {
@@ -96,16 +94,15 @@ void AdjList::ResizeAdjList (uint size)
 */
 bool AdjList::FillAdjList (const string& fileAdj)
 {
-    ifstream adjFile;
+    ifstream adjFile (fileAdj);
     string   line;
-
-    ResizeAdjList (names.size ());
-    adjFile.open (fileAdj);
 
     if (!adjFile.is_open ())
     {
         return false;
     }
+
+    ResizeAdjList (names.size ());
 
     for (uint idx = 0; getline (adjFile, line) && idx < names.size (); idx++)
     {
