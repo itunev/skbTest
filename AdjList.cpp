@@ -16,6 +16,15 @@ vector<string> AdjList::names;
 AList          AdjList::adjList;
 
 /**
+* check for existing oriented edge
+*/
+bool AdjList::GetEdge (uint from, uint to)
+{
+    return (adjList [from] &&
+            adjList [from] -> find (to) !=
+            adjList [from] -> end ());
+}
+/**
 * input data from files to structures
 */
 bool AdjList::FillLists (const string& fileNames, const string& fileAdj)
@@ -63,7 +72,9 @@ bool AdjList::FillNamesList (const string& fileNames)
 
     return true;
 }
-
+/**
+* clear adjList and resize it filling by empty pointers
+*/
 void AdjList::ResizeAdjList (uint size)
 {
     for (AList::iterator it = adjList.begin(); it != adjList.end(); it++)
@@ -156,13 +167,11 @@ void AdjList::UpdateDegreesInfoByNextNode (uint idx)
 
     for (hashid::iterator hit = node -> begin (); hit != node -> end (); hit++)
     {
-        innerDegrees [*hit]++;        // idx likes *hit
+        innerDegrees [*hit]++;   // idx likes *hit
 
         maxInnerDegree = max (maxInnerDegree, innerDegrees [*hit]);
 
-        if (adjList [*hit] &&
-            adjList [*hit] -> find (idx) !=
-            adjList [*hit] -> end ()) // is *hit likes idx too
+        if (GetEdge (*hit, idx)) // is *hit likes idx too
         {
             reflectDegrees [idx]++;
         }

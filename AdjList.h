@@ -36,8 +36,10 @@ public:
     AdjList            (AdjList& al) { };
     virtual ~AdjList   ( )           { };
 
+    static bool GetEdge    (uint          from,
+                            uint          to     );
     static bool FillLists  (const string& fileNames,
-                                const string& fileAdj); // for initialisation of lists
+                            const string& fileAdj);   // for initialisation of lists
     static void ClearLists ( );            // for correct finish without memory leaks
 private:
     static void ResizeAdjList               (uint          size      );
