@@ -20,33 +20,12 @@ AList          AdjList::adjList;
 */
 bool AdjList::FillLists (const string& fileNames, const string& fileAdj)
 {
-    ifstream namesFile;
-    namesFile.open (fileNames);
-
-    if (namesFile.is_open ())
-    {
-        FillNamesList (namesFile);
-        namesFile.close();
-    }
-    else
+    if (!FillNamesList (fileNames))
     {
         return false;
     }
 
-    ifstream adjFile;
-    adjFile.open (fileAdj);
-
-    if (adjFile.is_open ())
-    {
-        if (!FillAdjList (adjFile))
-        {
-            adjFile.close();
-            return false;
-        }
-
-        adjFile.close();
-    }
-    else
+    if (!FillAdjList (fileAdj))
     {
         return false;
     }
@@ -61,17 +40,26 @@ void AdjList::ClearLists ( )
 /**
 * fill names list from file
 */
-void AdjList::FillNamesList (ifstream& myfile)
+bool AdjList::FillNamesList (const string& fileNames)
 {
+    ifstream namesFile;
     string   line;
+    namesFile.open (fileNames);
 
-    while (getline (myfile, line))
+    if (!namesFile.is_open ())
+        return false;
+
+    while (getline (namesFile, line))
     {
         if (line.size ())
         {
             names.push_back (line);
         }
     }
+
+    namesFile.close();
+
+    return true;
 }
 
 void AdjList::ResizeAdjList (uint size)
@@ -89,21 +77,29 @@ void AdjList::ResizeAdjList (uint size)
 /**
 * prepare and fill adjacency list from file
 */
-bool AdjList::FillAdjList (ifstream& myfile)
+bool AdjList::FillAdjList (const string& fileAdj)
 {
-    uint   idx = 0;
-    string line;
+    ifstream adjFile;
+    uint     idx = 0;
+    string   line;
     ResizeAdjList (names.size ());
+    adjFile.open (fileAdj);
 
-    while (getline (myfile, line) && idx < names.size ())
+    if (!adjFile.is_open ())
+        return false;
+
+    while (getline (adjFile, line) && idx < names.size ())
     {
         if (!SetAdjListLine (line, idx))
          {
+            adjFile.close();
             return false;
          }
 
         idx++;
     }
+
+    adjFile.close();
 
     return true;
 }
