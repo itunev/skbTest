@@ -4,6 +4,9 @@
 #include <fstream>
 #include <iostream>
 
+template <class UnaryPredicate>
+void copy_if (vector<uint>& cont_from, vector<uint>& cont_to, UnaryPredicate pred);
+
 vector<uint>   AdjList::emptyMutual;
 vector<uint>   AdjList::emptyInnerDegrees;
 vector<uint>   AdjList::maxInnerDegrees;
@@ -53,6 +56,7 @@ bool AdjList::FillNamesList (const string& fileNames)
 {
     ifstream namesFile;
     string   line;
+
     namesFile.open (fileNames);
 
     if (!namesFile.is_open ())
@@ -94,6 +98,7 @@ bool AdjList::FillAdjList (const string& fileAdj)
 {
     ifstream adjFile;
     string   line;
+
     ResizeAdjList (names.size ());
     adjFile.open (fileAdj);
 
@@ -124,13 +129,13 @@ bool AdjList::SetAdjListLine (const string& line, uint idx)
     istringstream ss (line);
     uint          dest;
 
-    while (!ss.eof())
+    while (!ss.eof ())
     {
         ss >> dest;
 
         if (dest < names.size () && dest != idx)
         {
-            elist->insert (dest);
+            elist -> insert (dest);
         }
         else
         {
@@ -181,54 +186,34 @@ void AdjList::UpdateDegreesInfoByNextNode (uint idx)
 void AdjList::NamesWithEmptyDegreeCount ()
 {
     emptyInnerDegrees.clear ();
-
-    for (uint i = 0; i < innerDegrees.size (); i++)
-    {
-        if (innerDegrees [i] == 0)
-        {
-            emptyInnerDegrees.push_back (i);
-        }
-    }
+    copy_if (innerDegrees, emptyInnerDegrees,
+             [&] (uint i) { return (innerDegrees [i] == 0); });
 }
 // solving task 2
 void AdjList::NamesWithEmptyReflectDegreeCount ()
 {
     emptyMutual.clear ();
-
-    for (uint i = 0; i < reflectDegrees.size (); i++)
-    {
-        if (reflectDegrees [i] == 0 && adjList[i])
-        {
-            emptyMutual.push_back (i);
-        }
-    }
+    copy_if (reflectDegrees, emptyMutual,
+             [&] (uint i) { return (reflectDegrees [i] == 0 && adjList[i]); });
 }
 // solving tasks 3
 void AdjList::NamesWithMaxDegreeCount ()
 {
     maxInnerDegrees.clear ();
-
-    for (uint i = 0; i < innerDegrees.size (); i++)
-    {
-        if (innerDegrees [i] == maxInnerDegree)
-        {
-            maxInnerDegrees.push_back (i);
-        }
-    }
+    copy_if (innerDegrees, maxInnerDegrees,
+             [&] (uint i) { return (innerDegrees [i] == maxInnerDegree); });
 }
+
 // show requested list
 void AdjList::ShowList (uint request)
 {
     switch (request)
     {
-        case EmptyInnerDegreesCount:
-            ShowList (emptyInnerDegrees);
+        case EmptyInnerDegreesCount:  ShowList (emptyInnerDegrees);
             break;
-        case EmptyMutualDegreesCount:
-            ShowList (emptyMutual);
+        case EmptyMutualDegreesCount: ShowList (emptyMutual      );
             break;
-        case MaxInnerDegreesCount:
-            ShowList (maxInnerDegrees);
+        case MaxInnerDegreesCount:    ShowList (maxInnerDegrees  );
             break;
         default:
             cout << "unknown request " << request << endl;
@@ -240,6 +225,18 @@ void AdjList::ShowList (vector<uint>& idsList)
     for (uint i = 0; i < idsList.size (); i++)
     {
         cout << names [idsList [i]] << "\n";
+    }
+}
+
+template <class UnaryPredicate>
+void copy_if (vector<uint>& cont_from, vector<uint>& cont_to, UnaryPredicate pred)
+{
+    for (uint i = 0; i < cont_from.size (); i++)
+    {
+        if (pred (i))
+        {
+            cont_to.push_back (i);
+        }
     }
 }
 
