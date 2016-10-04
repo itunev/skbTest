@@ -1,7 +1,7 @@
 Для компиляции под линукс в консоли:
 -----------------------------------
-g++ -Wall -g -c AdjList.cpp -o al.o
-g++ -Wall -g -c main.cpp -o m.o
+g++ -Wall -g -c AdjList.cpp -o al.o -std=c++11
+g++ -Wall -g -c main.cpp -o m.o -std=c++11
 g++ m.o al.o -o m
 -----------------------------------
 
